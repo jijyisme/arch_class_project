@@ -35,6 +35,7 @@ int verbose;
 //------------------------------------//
 
 int BHR[pow(2,ghistoryBits)];
+int max_ghistroy_decimal;
 int pattern;
 //
 //TODO: Add your own Branch Predictor data structures here
@@ -90,6 +91,18 @@ make_prediction(uint32_t pc)
 //
 
 void
+train_predictor_gshare(uint32_t pc, uint8_t outcome)
+{
+  //
+  //TODO: Implement Predictor training
+  //
+  // UPDATE PATTERN
+  pattern = (pattern << 1) % (max_ghistroy_decimal) + outcome;
+  // UPDATE BHR
+  BHR[pc^pattern] = outcome;
+}
+
+void
 train_predictor(uint32_t pc, uint8_t outcome)
 {
   //
@@ -98,7 +111,7 @@ train_predictor(uint32_t pc, uint8_t outcome)
   switch (bpType) {
     case STATIC:
       return TAKEN;
-    case GSHARE: train_predictor_gshare(pc, outcome)
+    case GSHARE: train_predictor_gshare(pc, outcome);
     case TOURNAMENT: 
     case CUSTOM:
     default:
@@ -107,14 +120,4 @@ train_predictor(uint32_t pc, uint8_t outcome)
 }
 
 
-void
-train_predictor_gshare(uint32_t pc, uint8_t outcome)
-{
-  //
-  //TODO: Implement Predictor training
-  //
-  // UPDATE PATTERN
-  pattern = (pattern << 1) % (max_ghistroy_decimal) + outcome
-  // UPDATE BHR
-  BHR[pc^pattern] = outcome 
-}
+
