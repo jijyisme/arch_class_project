@@ -7,6 +7,7 @@
 //========================================================//
 #include <stdio.h>
 #include "predictor.h"
+#include <math.h>
 
 //
 // TODO:Student Information
@@ -33,6 +34,8 @@ int verbose;
 //      Predictor Data Structures     //
 //------------------------------------//
 
+int BHR[pow(2,ghistoryBits)];
+int pattern;
 //
 //TODO: Add your own Branch Predictor data structures here
 //
@@ -50,6 +53,9 @@ init_predictor()
   //
   //TODO: Initialize Branch Predictor Data Structures
   //
+  BHR = {0};
+  max_ghistroy_decimal = pow(2, ghistoryBits);
+  pattern = 0;
 }
 
 // Make a prediction for conditional branch instruction at PC 'pc'
@@ -67,7 +73,7 @@ make_prediction(uint32_t pc)
   switch (bpType) {
     case STATIC:
       return TAKEN;
-    case GSHARE:
+    case GSHARE: BHR[pc^pattern]
     case TOURNAMENT:
     case CUSTOM:
     default:
@@ -82,10 +88,33 @@ make_prediction(uint32_t pc)
 // outcome 'outcome' (true indicates that the branch was taken, false
 // indicates that the branch was not taken)
 //
+
 void
 train_predictor(uint32_t pc, uint8_t outcome)
 {
   //
   //TODO: Implement Predictor training
   //
+  switch (bpType) {
+    case STATIC:
+      return TAKEN;
+    case GSHARE: train_predictor_gshare(pc, outcome)
+    case TOURNAMENT: 
+    case CUSTOM:
+    default:
+      break;
+  }
+}
+
+
+void
+train_predictor_gshare(uint32_t pc, uint8_t outcome)
+{
+  //
+  //TODO: Implement Predictor training
+  //
+  // UPDATE PATTERN
+  pattern = (pattern << 1) % (max_ghistroy_decimal) + outcome
+  // UPDATE BHR
+  BHR[pc^pattern] = outcome 
 }
