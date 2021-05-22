@@ -103,7 +103,7 @@ main(int argc, char *argv[])
   }
 
   // Initialize the predictor
-  printf("call init_predictor");
+  //printf("call init_predictor");
   init_predictor();
 
   uint32_t num_branches = 0;
@@ -116,7 +116,7 @@ main(int argc, char *argv[])
     num_branches++;
 
     // Make a prediction and compare with actual outcome
-    printf("call make_prediction");
+    //printf("call make_prediction");
     uint8_t prediction = make_prediction(pc);
     if (prediction != outcome) {
       mispredictions++;
@@ -126,7 +126,7 @@ main(int argc, char *argv[])
     }
 
     // Train the predictor
-    printf("train_predictor");
+    //printf("train_predictor");
     train_predictor(pc, outcome);
   }
 
